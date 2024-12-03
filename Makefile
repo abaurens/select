@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/10/02 11:43:10 by abaurens          #+#    #+#              #
-#    Updated: 2020/12/29 20:56:20 by abaurens         ###   ########.fr        #
+#    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
+#    Updated: 2024/12/03 20:11:08 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,10 @@ INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 DEFINES :=
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
-CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES) -O3 -Werror
+DEB_CFLAGS := -O0 -g
+REL_CFLAGS := -O3 -Werror
+
+CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES)
 LDFLAGS :=  -lncurses
 
 all:	$(NAME)
@@ -45,11 +48,14 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	$(LINKER) $(NAME) $(OBJS) $(LDFLAGS)
 
+debug:	REL_CFLAGS := $(DEB_CFLAGS)
+debug:	$(NAME)
+
 -include $(INCDEPS)
 
 $(OBJD)/%.o:	$(SRCD)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(REL_CFLAGS) -o $@ -c $<
 
 clean:
 	$(RM) $(OBJD)
@@ -60,4 +66,4 @@ fclean:
 
 re:	fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re debug
