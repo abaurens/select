@@ -25,6 +25,7 @@ OBJD  :=  obj
 SRCS  :=        \
       parsing.c \
       memory.c  \
+      events.c  \
       error.c   \
       main.c    \
       UI.c
