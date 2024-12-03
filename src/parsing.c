@@ -19,7 +19,8 @@ static const struct option g_long_options[] = {
   /* Options */
   { "delimiter", required_argument, 0, 'd' },
   { "column",    required_argument, 0, 'c' },
-  { "help",      no_argument,       0, 'h' }
+  { "help",      no_argument,       0, 'h' },
+  {0, 0, 0, 0}
 };
 
 
