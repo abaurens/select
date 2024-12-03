@@ -5,6 +5,10 @@
 
 #include <stddef.h>
 
+#ifndef VERSION
+#define VERSION "<unknown-version>\n"
+#endif
+
 enum e_exit_codes
 {
   EX_SUCCESS,

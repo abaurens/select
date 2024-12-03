@@ -19,6 +19,7 @@ static const struct option g_long_options[] = {
   /* Options */
   { "delimiter", required_argument, 0, 'd' },
   { "column",    required_argument, 0, 'c' },
+  { "version",   no_argument,       0, 'v' },
   { "help",      no_argument,       0, 'h' },
   {0, 0, 0, 0}
 };
@@ -32,6 +33,7 @@ static void print_usage(const char *const app_name)
 
   WRITE_LSTR("  OPTIONS:\n");
   WRITE_LSTR("   -h, --help:          Print this message and exit\n");
+  WRITE_LSTR("   -v, --version:       Show the version number and exit\n");
   WRITE_LSTR("   -s, --single:        Enable single selection mode.\n");
   WRITE_LSTR("   -d, --delimiter=sep: Specify how the selection should be separatedin the final result. (default=" ")\n");
   WRITE_LSTR("   -c, --column=column: Specify how many column the choice must be displayed on. (default=auto)\n");
@@ -99,6 +101,11 @@ int parse_arguments(int ac, char **av)
 
       case 'h':
         print_usage(*av);
+        break;
+
+      case 'v':
+        WRITE_LSTR(VERSION);
+        exit(EX_SUCCESS);
         break;
 
       case 's':

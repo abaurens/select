@@ -6,7 +6,7 @@
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
-#    Updated: 2024/12/03 20:11:08 by abaurens         ###   ########.fr        #
+#    Updated: 2024/12/03 23:53:54 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJS    :=  $(addprefix $(OBJD)/,$(SRCS:.c=.o))
 SRCS    :=  $(addprefix $(SRCD)/,$(SRCS))
 INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 
-DEFINES :=
+DEFINES :=  VERSION="\"$(shell git describe --tag)\n\""
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
 DEB_CFLAGS := -O0 -g
