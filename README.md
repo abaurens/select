@@ -1,3 +1,3 @@
 # select
 
-a simple unix command to generate interactive CLI selections
+A simple unix command to generate interactive CLI selections
