@@ -2,25 +2,30 @@
 #include "select.h"
 #include "settings.h"
 
-#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 t_settings g_settings;
 
 static void print_selection(t_entry *entries, int entry_count)
 {
-  int i;
-  int selected_count;
+  int        i;
+  int        sep_len;
+  int        selected_count;
+  const char *entry_str;
 
   selected_count = 0;
+  sep_len = strlen(g_settings.separator);
   for (i = 0; i < entry_count; ++i)
   {
     if (!entries[i].selected)
       continue;
+    entry_str = entries[i].value;
     if (selected_count++ > 0)
-      printf("%s", g_settings.separator);
-    printf("%s", entries[i].value);
+      write(1, g_settings.separator, sep_len);
+    write(1, entry_str, strlen(entry_str));
   }
-  printf("\n");
+  write(1, "\n", 1);
 }
 
 int main(int ac, char **av)

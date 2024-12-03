@@ -7,6 +7,9 @@
 #include <limits.h>
 #include <string.h>
 #include <strings.h>
+#include <unistd.h>
+
+#define WRITE_LSTR(_str) write(1, _str, sizeof(_str) - 1)
 
 static const struct option g_long_options[] = {
   /* Flags */
@@ -22,14 +25,17 @@ static const struct option g_long_options[] = {
 
 static void print_usage(const char *const app_name)
 {
-  printf("Usage: %s [OPTION]... [ENTRY]...\n", app_name);
-  printf("  OPTIONS:\n");
-  printf("   -h, --help:          Print this message and exit\n");
-  printf("   -s, --single:        Enable single selection mode.\n");
-  printf("   -d, --delimiter=sep: Specify how the selection should be separatedin the final result. (default=" ")\n");
-  printf("   -c, --column=column: Specify how many column the choice must be displayed on. (default=auto)\n");
-  printf("       --high-contrast: Enables high contrast mode.\n");
-  printf("  ENTRIES: One or more entries to select from.\n");
+  WRITE_LSTR("Usage: ");
+  write(1, app_name, strlen(app_name));
+  WRITE_LSTR(" [OPTION]... [ENTRY]...\n");
+
+  WRITE_LSTR("  OPTIONS:\n");
+  WRITE_LSTR("   -h, --help:          Print this message and exit\n");
+  WRITE_LSTR("   -s, --single:        Enable single selection mode.\n");
+  WRITE_LSTR("   -d, --delimiter=sep: Specify how the selection should be separatedin the final result. (default=" ")\n");
+  WRITE_LSTR("   -c, --column=column: Specify how many column the choice must be displayed on. (default=auto)\n");
+  WRITE_LSTR("       --high-contrast: Enables high contrast mode.\n");
+  WRITE_LSTR("  ENTRIES: One or more entries to select from.\n");
   exit(EX_SUCCESS);
 }
 
