@@ -8,7 +8,7 @@
 
 #include <ncurses.h>
 
-#define MARGIN 3
+#define MARGIN 2
 
 static int calc_max_column_count(const t_entry *entries, size_t entry_count)
 {
@@ -65,9 +65,9 @@ t_app_status present(t_entry *entries, int entry_count)
   do
   {
     clear();
-    column_count = g_settings.column_count;
-    if (column_count == 0)
-      column_count = calc_max_column_count(entries, entry_count);
+    column_count = calc_max_column_count(entries, entry_count);
+    if (g_settings.column_count > 0 && g_settings.column_count < column_count)
+      column_count = column_count;
 
     column_width = COLS / column_count;
 
