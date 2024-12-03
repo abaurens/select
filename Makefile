@@ -36,7 +36,7 @@ INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 DEFINES :=
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
-CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES) #-O3 #-Werror
+CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES) -O3 -Werror
 LDFLAGS :=  -lncurses
 
 all:	$(NAME)
