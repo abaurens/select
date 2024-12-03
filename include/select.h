@@ -5,7 +5,7 @@
 
 #include <stddef.h>
 
-enum exit_codes
+enum e_exit_codes
 {
   EX_SUCCESS,
   EX_CANCLED,
@@ -19,7 +19,7 @@ typedef enum
   WAITING,
   VALIDATED,
   CANCLED
-} app_status;
+} t_app_status;
 
 
 #define PRINTF_LIKE(_arg) __attribute__((format(printf, _arg, (_arg + 1))))
@@ -35,6 +35,6 @@ void fatal_error(int exit_code, const char *const format, ...) PRINTF_LIKE(2);
 t_entry *allocate_entries(size_t entry_count, char **entries);
 
 /* UI.c */
-app_status present(t_entry *entries, int entry_count);
+t_app_status present(t_entry *entries, int entry_count);
 
 #endif

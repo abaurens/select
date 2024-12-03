@@ -48,7 +48,7 @@ void present_entry(const t_entry *entry, int x, int y, bool hovered)
     attroff(hover_code);
 }
 
-app_status process_event(t_entry *entries, int entry_count, int column_count, int *cursor)
+t_app_status process_event(t_entry *entries, int entry_count, int column_count, int *cursor)
 {
   int key = getch();
   int x = *cursor % column_count;
@@ -95,7 +95,7 @@ app_status process_event(t_entry *entries, int entry_count, int column_count, in
   return WAITING;
 }
 
-app_status present(t_entry *entries, int entry_count)
+t_app_status present(t_entry *entries, int entry_count)
 {
   int i;
   int x;
