@@ -25,7 +25,6 @@ static const struct option g_long_options[] = {
 };
 
 const char g_escapable[][2] = {
-  /*{ '\\', '\\' },*/
   { '0',  '\0' },
   { 'a',  '\a' },
   { 'b',  '\b' },
