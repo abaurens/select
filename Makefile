@@ -6,7 +6,7 @@
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
-#    Updated: 2024/12/03 23:53:54 by abaurens         ###   ########.fr        #
+#    Updated: 2024/12/04 01:09:12 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,25 +37,40 @@ INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 DEFINES :=  VERSION="\"$(shell git describe --tag)\n\""
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
-DEB_CFLAGS := -O0 -g
-REL_CFLAGS := -O3 -Werror
+OPTI_LVL   := 3
 
 CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES)
-LDFLAGS :=  -lncurses
+LDFLAGS :=  -lncurses -ltinfo
+
+AIO := false
+ifeq ($(strip $(AIO)), true)
+# Optimize for binary size and force static linkage
+	OPTI_LVL := s
+	LDFLAGS  := -static $(LDFLAGS)
+endif
+
+DEBUG := false
+ifeq ($(strip $(DEBUG)), true)
+# Optimize for debugging and enable debug symbols
+	OPTI_LVL := g
+	CFLAGS   := $(CFLAGS) -g
+else
+# Optimize for speed and enable no tollerance mode on warnings
+	CFLAGS   := $(CFLAGS) -Werror
+endif
+
+CFLAGS := -O$(OPTI_LVL) $(CFLAGS)
 
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
 	$(LINKER) $(NAME) $(OBJS) $(LDFLAGS)
 
-debug:	REL_CFLAGS := $(DEB_CFLAGS)
-debug:	$(NAME)
-
 -include $(INCDEPS)
 
 $(OBJD)/%.o:	$(SRCD)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(REL_CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	$(RM) $(OBJD)

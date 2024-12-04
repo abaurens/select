@@ -7,9 +7,8 @@
 #include <limits.h>
 #include <string.h>
 #include <strings.h>
-#include <unistd.h>
 
-#define WRITE_LSTR(_str) write(1, _str, sizeof(_str) - 1)
+#define WRITE_LSTR(_str) void_write(1, _str, sizeof(_str) - 1)
 
 static const struct option g_long_options[] = {
   /* Flags */
@@ -28,7 +27,7 @@ static const struct option g_long_options[] = {
 static void print_usage(const char *const app_name)
 {
   WRITE_LSTR("Usage: ");
-  write(1, app_name, strlen(app_name));
+  void_write(1, app_name, strlen(app_name));
   WRITE_LSTR(" [OPTION]... [ENTRY]...\n");
 
   WRITE_LSTR("  OPTIONS:\n");
@@ -89,7 +88,7 @@ int parse_arguments(int ac, char **av)
   {
     int option_index = 0;
 
-    c = getopt_long(ac, av, "sc:d:h", g_long_options, &option_index);
+    c = getopt_long(ac, av, "hvsc:d:", g_long_options, &option_index);
 
     if (c == -1)
       break;

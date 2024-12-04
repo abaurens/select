@@ -1,0 +1,82 @@
+name: Build and release the app
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['[0-9]+.[0-9]+.[0-9]+']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Get version'
+        run: |
+          echo "version=$(git describe --tag)" >> version
+          cat version >> $GITHUB_ENV
+
+      - name: 'Build static application'
+        run: |
+          mkdir -p './packages'
+          make re AIO=true && \
+          tar -czvf "./packages/select-static-${{env.version}}-x86_64.tar.gz" select
+
+      - name: 'Build application'
+        run: |
+          mkdir -p './packages'
+          make re && \
+          tar -czvf "./packages/select-${{env.version}}-x86_64.tar.gz" select
+
+      - name: 'Upload artifacts'
+        uses: 'actions/upload-artifact@v4'
+        with:
+          name: release
+          path: |
+            version
+            ./packages/*.tar.gz
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: 'Download artifact'
+        uses: 'actions/download-artifact@v4'
+        with:
+          name: release
+          path: ./
+
+      - name: 'List files'
+        run: |
+          ls -la
+          ls -la packages
+
+      - name: 'Get version'
+        run: cat version >> $GITHUB_ENV
+
+      - name: 'Create release'
+        uses: 'softprops/action-gh-release@v2'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{env.version}}
+          name: Release - ${{env.version}}
+          generate_release_notes: true
+          draft: true
+          prerelease: true
+          files: |
+            ./packages/select-${{env.version}}-x86_64.tar.gz
+            ./packages/select-static-${{env.version}}-x86_64.tar.gz

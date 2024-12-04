@@ -36,6 +36,7 @@ void error(const char *const format, ...) PRINTF_LIKE(1);
 void fatal_error(int exit_code, const char *const format, ...) PRINTF_LIKE(2);
 
 /* memory.c */
+void     void_write(int fd, const char *const str, int size);
 t_entry *allocate_entries(size_t entry_count, char **entries);
 
 /* UI.c */

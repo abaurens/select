@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <unistd.h>
 
 t_entry *allocate_entries(size_t entry_count, char **entries)
 {
@@ -19,4 +20,9 @@ t_entry *allocate_entries(size_t entry_count, char **entries)
     result[i].value = entries[i];
 
   return result;
+}
+
+void void_write(int fd, const char *const str, int size)
+{
+  (void)!write(fd, str, size);
 }
