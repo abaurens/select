@@ -6,41 +6,41 @@
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
-#    Updated: 2024/12/04 01:09:12 by abaurens         ###   ########.fr        #
+#    Updated: 2024/12/04 13:57:47 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC      :=	gcc
-RM      :=  rm -rf
-CP      :=  cp -rf
-LINKER  :=  gcc -o
+CC     := gcc
+RM     := rm -rf
+CP     := cp -rf
+LINKER := gcc -o
 
 CVERSION := c99
 
-NAME   :=  select
+NAME := select
 
-SRCD  :=  src
-OBJD  :=  obj
+SRCD := src
+OBJD := obj
 
-SRCS  :=        \
-      parsing.c \
-      memory.c  \
-      events.c  \
-      error.c   \
-      main.c    \
-      UI.c
+SRCS := parsing.c \
+        memory.c  \
+        events.c  \
+        error.c   \
+        main.c    \
+        UI.c
 
 OBJS    :=  $(addprefix $(OBJD)/,$(SRCS:.c=.o))
 SRCS    :=  $(addprefix $(SRCD)/,$(SRCS))
 INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 
-DEFINES :=  VERSION="\"$(shell git describe --tag)\n\""
+DEFINES := _GNU_SOURCE                                 \
+           VERSION="\"$(shell git describe --tag)\n\""
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
-OPTI_LVL   := 3
+OPTI_LVL := 3
 
-CFLAGS  :=  -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES)
-LDFLAGS :=  -lncurses -ltinfo
+CFLAGS  := -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES)
+LDFLAGS := -lncurses -ltinfo
 
 AIO := false
 ifeq ($(strip $(AIO)), true)

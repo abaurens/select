@@ -6,6 +6,7 @@
 #include <getopt.h>
 #include <limits.h>
 #include <string.h>
+#include <unistd.h>
 #include <strings.h>
 
 #define WRITE_LSTR(_str) void_write(1, _str, sizeof(_str) - 1)
@@ -23,6 +24,17 @@ static const struct option g_long_options[] = {
   {0, 0, 0, 0}
 };
 
+const char g_escapable[][2] = {
+  { '0',  '\0' },
+  { 'a',  '\a' },
+  { 'b',  '\b' },
+  { 't',  '\t' },
+  { 'n',  '\n' },
+  { 'v',  '\v' },
+  { 'f',  '\f' },
+  { 'r',  '\r' },
+  { 0, 0 }
+};
 
 static void print_usage(const char *const app_name)
 {
@@ -40,7 +52,6 @@ static void print_usage(const char *const app_name)
   WRITE_LSTR("  ENTRIES: One or more entries to select from.\n");
   exit(EX_SUCCESS);
 }
-
 
 static bool parse_integer(const char *const value_str, int *dest)
 {
@@ -78,12 +89,48 @@ static void parse_column_count(const char *const value)
     fatal_error(EX_PARSING_ERROR, "Invalid argument for column option -- '%s'", value);
 }
 
+/*
+** C11 5.1.2.2.1/2 says:
+** "The parameters `argc` and `argv` and the strings pointed to by
+** the `argv` array shall be modifiable by the program, and retain their
+** last-stored values between program startup and program termination."
+**
+** This means we can safely evaluate escaped characters in place, as this
+** process only reduces the total string length.
+*/
+char *parse_delimiter(char *const delimiter)
+{
+  int i;
+  char *pos = delimiter;
+  char *end = pos + strlen(pos);
+
+  while (pos && *(pos = strchrnul(pos, '\\')))
+  {
+    ++pos;
+    for (i = 0; *g_escapable[i]; ++i)
+    {
+      if (*pos == 0)
+        continue;
+
+      if (*pos == g_escapable[i][0])
+      {
+        *pos = g_escapable[i][1];
+        break;
+      }
+    }
+    memmove(pos - 1, pos, end - pos);
+    *--end = 0;
+  }
+  return delimiter;
+}
+
 int parse_arguments(int ac, char **av)
 {
   char c;
 
   bzero(&g_settings, sizeof(t_settings));
-  g_settings.separator = " ";
+  g_settings.separator = isatty(1) ? " " : "\n";
+
   while (true)
   {
     int option_index = 0;
@@ -112,7 +159,7 @@ int parse_arguments(int ac, char **av)
         break;
 
       case 'd':
-        g_settings.separator = optarg;
+        g_settings.separator = parse_delimiter(optarg);
         break;
 
       case 'c':
