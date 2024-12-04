@@ -57,7 +57,10 @@ t_app_status present(t_entry *entries, int entry_count)
   int column_count;
   int cursor;
 
-  initscr();
+  FILE *f = fopen("/dev/tty", "r+");
+  SCREEN *screen = newterm(NULL, f, f);
+  set_term(screen);
+
   noecho();
   keypad(stdscr, TRUE);
 
@@ -87,5 +90,6 @@ t_app_status present(t_entry *entries, int entry_count)
   } while (i == WAITING);
 
   endwin();
+  delscreen(screen);
   return i;
 }

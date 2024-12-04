@@ -41,7 +41,6 @@ static void print_usage(const char *const app_name)
   exit(EX_SUCCESS);
 }
 
-
 static bool parse_integer(const char *const value_str, int *dest)
 {
   int     i;
