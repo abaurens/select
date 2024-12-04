@@ -39,8 +39,8 @@ jobs:
         with:
           tag_name: ${{env.version}}
           name: Release - ${{env.version}}
+          body: '**Full Changelog**: https://git.baurens.net/arthur/select/commits/tag/${{env.version}}'
           draft: true
-          prerelease: true
           files: |
             select-${{env.version}}-x86_64.tar.gz
             select-static-${{env.version}}-x86_64.tar.gz

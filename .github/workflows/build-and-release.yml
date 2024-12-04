@@ -76,7 +76,6 @@ jobs:
           name: Release - ${{env.version}}
           generate_release_notes: true
           draft: true
-          prerelease: true
           files: |
             ./packages/select-${{env.version}}-x86_64.tar.gz
             ./packages/select-static-${{env.version}}-x86_64.tar.gz
