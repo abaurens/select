@@ -6,6 +6,7 @@
 #include <getopt.h>
 #include <limits.h>
 #include <string.h>
+#include <unistd.h>
 #include <strings.h>
 
 #define WRITE_LSTR(_str) void_write(1, _str, sizeof(_str) - 1)
@@ -129,7 +130,8 @@ int parse_arguments(int ac, char **av)
   char c;
 
   bzero(&g_settings, sizeof(t_settings));
-  g_settings.separator = " ";
+  g_settings.separator = isatty(1) ? " " : "\n";
+
   while (true)
   {
     int option_index = 0;
