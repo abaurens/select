@@ -6,7 +6,7 @@
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
-#    Updated: 2024/12/04 13:57:47 by abaurens         ###   ########.fr        #
+#    Updated: 2024/12/05 21:20:42 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,8 +61,6 @@ endif
 
 CFLAGS := -O$(OPTI_LVL) $(CFLAGS)
 
-all:	$(NAME)
-
 $(NAME):	$(OBJS)
 	$(LINKER) $(NAME) $(OBJS) $(LDFLAGS)
 
@@ -79,6 +77,6 @@ fclean:
 	$(RM) $(OBJD)
 	$(RM) $(NAME)
 
-re:	fclean all
+re:	fclean $(NAME)
 
-.PHONY: all clean fclean re debug
+.PHONY: clean fclean re debug
