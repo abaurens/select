@@ -6,7 +6,7 @@
 #    By: abaurens <abaurens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/03 03:51:56 by abaurens          #+#    #+#              #
-#    Updated: 2024/12/05 21:20:42 by abaurens         ###   ########.fr        #
+#    Updated: 2024/12/05 22:00:12 by abaurens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,10 @@ RM     := rm -rf
 CP     := cp -rf
 LINKER := gcc -o
 
-CVERSION := c99
-
 NAME := select
+
+CVERSION := ansi
+OPTI_LVL := 3
 
 SRCD := src
 OBJD := obj
@@ -33,30 +34,39 @@ OBJS    :=  $(addprefix $(OBJD)/,$(SRCS:.c=.o))
 SRCS    :=  $(addprefix $(SRCD)/,$(SRCS))
 INCDEPS :=  $(INCDEPS) $(OBJS:.o=.d)
 
+INCLUDES := ./include
+INCLUDES :=  $(addprefix -I,$(INCLUDES))
+
+
 DEFINES := _GNU_SOURCE                                 \
            VERSION="\"$(shell git describe --tag)\n\""
 DEFINES :=  $(addprefix -D,$(DEFINES))
 
-OPTI_LVL := 3
-
-CFLAGS  := -std=$(CVERSION) -MMD -MP -I./include -W -Wall -Wextra -pedantic $(DEFINES)
+CFLAGS  := -MMD -MP -W -Wall -Wextra -pedantic $(INCLUDES) $(DEFINES)
 LDFLAGS := -lncurses -ltinfo
+
+
+ifeq ($(strip $(CVERSION)), ansi)
+  CFLAGS := -ansi $(CFLAGS)
+else
+  CFLAGS := -std=$(CVERSION) $(CFLAGS)
+endif
 
 AIO := false
 ifeq ($(strip $(AIO)), true)
 # Optimize for binary size and force static linkage
-	OPTI_LVL := s
-	LDFLAGS  := -static $(LDFLAGS)
+  OPTI_LVL := s
+  LDFLAGS  := -static $(LDFLAGS)
 endif
 
 DEBUG := false
 ifeq ($(strip $(DEBUG)), true)
 # Optimize for debugging and enable debug symbols
-	OPTI_LVL := g
-	CFLAGS   := $(CFLAGS) -g
+  OPTI_LVL := g
+  CFLAGS   := $(CFLAGS) -g
 else
 # Optimize for speed and enable no tollerance mode on warnings
-	CFLAGS   := $(CFLAGS) -Werror
+  CFLAGS   := $(CFLAGS) -Werror
 endif
 
 CFLAGS := -O$(OPTI_LVL) $(CFLAGS)
