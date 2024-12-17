@@ -8,10 +8,6 @@
 
 #include <ncurses.h>
 
-
-
-#include <stdlib.h>
-
 #define MARGIN 2
 
 static int calc_max_column_count(const t_entry *entries, size_t entry_count)
@@ -51,7 +47,6 @@ static void present_entry(const t_entry *entry, int x, int y, bool hovered)
   if (hovered)
     attroff(hover_code);
 }
-
 
 t_app_status present(t_entry *entries, int entry_count)
 {
