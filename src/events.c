@@ -15,7 +15,7 @@ t_app_status process_event(t_entry *entries, int entry_count, int column_count, 
   {
     case 'q':
     case 33:
-      return CANCLED;
+      return CANCELLED;
 
     case '\n':
     case KEY_ENTER:

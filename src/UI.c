@@ -70,7 +70,7 @@ t_app_status present(t_entry *entries, int entry_count)
     clear();
     column_count = calc_max_column_count(entries, entry_count);
     if (g_settings.column_count > 0 && g_settings.column_count < column_count)
-      column_count = column_count;
+      column_count = g_settings.column_count;
 
     column_width = COLS / column_count;
 

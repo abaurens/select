@@ -3,6 +3,7 @@
 #include "settings.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 t_settings g_settings;
 
@@ -42,8 +43,9 @@ int main(int ac, char **av)
   if (!entries)
     fatal_error(EX_ALLOCATION_ERROR, NULL);
 
-  if (present(entries, entry_count) == CANCLED)
-    return EX_CANCLED;
+  if (present(entries, entry_count) == CANCELLED)
+    return EX_CANCELLED;
   print_selection(entries, entry_count);
+  free(entries);
   return EX_SUCCESS;
 }

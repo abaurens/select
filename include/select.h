@@ -12,7 +12,7 @@
 enum e_exit_codes
 {
   EX_SUCCESS,
-  EX_CANCLED,
+  EX_CANCELLED,
   EX_ERROR,
   EX_PARSING_ERROR,
   EX_ALLOCATION_ERROR
@@ -22,7 +22,7 @@ typedef enum
 {
   WAITING,
   VALIDATED,
-  CANCLED
+  CANCELLED
 } t_app_status;
 
 
