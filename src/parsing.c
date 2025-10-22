@@ -56,7 +56,7 @@ static void print_usage(const char *const app_name)
   WRITE_LSTR("   -s, --single:         Enable single selection mode.\n");
   WRITE_LSTR("   -1, --skip-single:    Skip user input whenever there is only one choice available (default with --single)\n");
   WRITE_LSTR("   -n, --no-skip-single: Never skip user input (default without --single)\n");
-  WRITE_LSTR("   -d, --delimiter=sep:  Specify how the selection should be separatedin the final result. (default=" ")\n");
+  WRITE_LSTR("   -d, --delimiter=sep:  Specify how the selection should be separatedin the final result. (default=\" \")\n");
   WRITE_LSTR("   -c, --column=column:  Specify how many column the choice must be displayed on. (default=auto)\n");
   WRITE_LSTR("       --high-contrast:  Enables high contrast mode.\n");
   WRITE_LSTR("  ENTRIES: One or more entries to select from.\n");
