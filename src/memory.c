@@ -2,8 +2,9 @@
 
 #include <stddef.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <unistd.h>
+#include <string.h>
+#include <strings.h>
 
 t_entry *allocate_entries(size_t entry_count, char **entries)
 {
@@ -25,4 +26,9 @@ t_entry *allocate_entries(size_t entry_count, char **entries)
 void void_write(int fd, const char *const str, int size)
 {
   (void)!write(fd, str, size);
+}
+
+void print(int fd, const char *const str)
+{
+  void_write(fd, str, strlen(str));
 }

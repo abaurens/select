@@ -23,7 +23,7 @@ static void print_selection(t_entry *entries, int entry_count)
     entry_str = entries[i].value;
     if (selected_count++ > 0)
       void_write(1, g_settings.separator, sep_len);
-    void_write(1, entry_str, strlen(entry_str));
+    print(1, entry_str);
   }
   void_write(1, "\n", 1);
 }
@@ -38,6 +38,13 @@ int main(int ac, char **av)
   entry_count = ac - opt_count;
   if (entry_count == 0)
     return EX_SUCCESS;
+
+  if (entry_count == 1 && g_settings.skip_single_choice)
+  {
+    print(1, *(av + opt_count));
+    void_write(1, "\n", 1);
+    return EX_SUCCESS;
+  }
 
   entries = allocate_entries(entry_count, av + opt_count);
   if (!entries)
