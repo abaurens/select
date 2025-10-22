@@ -11,7 +11,7 @@
 
 #define WRITE_LSTR(_str) void_write(1, _str, sizeof(_str) - 1)
 
-#define SHORT_OPTIONS "hvsn1c:d:"
+#define SHORT_OPTIONS "hvsn1p:c:d:"
 
 /* We need this to warn about conflicting flags */
 static int g_skip_single_choice_flag = 0;
@@ -20,11 +20,12 @@ static int g_no_skip_single_choice_flag = 0;
 static const struct option g_long_options[] = {
   /* Flags */
   { "single",         no_argument, &g_settings.single_selection_flag, 1 },
-  { "skip-single",    no_argument, &g_skip_single_choice_flag,          1 },
-  { "no-skip-single", no_argument, &g_no_skip_single_choice_flag,       1 },
+  { "skip-single",    no_argument, &g_skip_single_choice_flag,        1 },
+  { "no-skip-single", no_argument, &g_no_skip_single_choice_flag,     1 },
   { "high-contrast",  no_argument, &g_settings.high_contrast_flag,    1 },
 
   /* Options */
+  { "prompt",    required_argument, 0, 'p' },
   { "delimiter", required_argument, 0, 'd' },
   { "column",    required_argument, 0, 'c' },
   { "version",   no_argument,       0, 'v' },
@@ -51,12 +52,13 @@ static void print_usage(const char *const app_name)
   WRITE_LSTR(" [OPTION]... [ENTRY]...\n");
 
   WRITE_LSTR("  OPTIONS:\n");
-  WRITE_LSTR("   -h, --help:           Print this message and exit\n");
-  WRITE_LSTR("   -v, --version:        Show the version number and exit\n");
+  WRITE_LSTR("   -h, --help:           Print this message and exit.\n");
+  WRITE_LSTR("   -v, --version:        Show the version number and exit.\n");
   WRITE_LSTR("   -s, --single:         Enable single selection mode.\n");
-  WRITE_LSTR("   -1, --skip-single:    Skip user input whenever there is only one choice available (default with --single)\n");
-  WRITE_LSTR("   -n, --no-skip-single: Never skip user input (default without --single)\n");
-  WRITE_LSTR("   -d, --delimiter=sep:  Specify how the selection should be separatedin the final result. (default=\" \")\n");
+  WRITE_LSTR("   -1, --skip-single:    Skip user input whenever there is only one choice available. (default with --single)\n");
+  WRITE_LSTR("   -n, --no-skip-single: Never skip user input. (default without --single)\n");
+  WRITE_LSTR("   -p, --prompt=prompt:  Displays the provided text above the selection.\n");
+  WRITE_LSTR("   -d, --delimiter=sep:  Specify how the selection should be separated in the final result. (default=\" \")\n");
   WRITE_LSTR("   -c, --column=column:  Specify how many column the choice must be displayed on. (default=auto)\n");
   WRITE_LSTR("       --high-contrast:  Enables high contrast mode.\n");
   WRITE_LSTR("  ENTRIES: One or more entries to select from.\n");
@@ -182,6 +184,10 @@ int parse_arguments(int ac, char **av)
 
       case 'd':
         g_settings.separator = parse_delimiter(optarg);
+        break;
+
+      case 'p':
+        g_settings.prompt = optarg;
         break;
 
       case '?':

@@ -53,6 +53,7 @@ t_app_status present(t_entry *entries, int entry_count)
   int i;
   int x;
   int y;
+  int start_height;
   int column_width;
   int column_count;
   int cursor;
@@ -63,6 +64,14 @@ t_app_status present(t_entry *entries, int entry_count)
 
   noecho();
   keypad(stdscr, TRUE);
+
+  start_height = 0;
+  if (g_settings.prompt)
+  {
+    start_height = 1;
+    for (i = 0; g_settings.prompt[i]; ++i)
+      start_height += (g_settings.prompt[i] == '\n');
+  }
 
   cursor = 0;
   do
@@ -77,11 +86,14 @@ t_app_status present(t_entry *entries, int entry_count)
     if (column_count > entry_count)
       column_count = entry_count;
 
+    if (g_settings.prompt)
+      mvprintw(0, 0, "%s", g_settings.prompt);
+
     for (i = 0; i < entry_count; ++i)
     {
       x = i % column_count;
       y = i / column_count;
-      present_entry(entries + i, x * column_width, y,
+      present_entry(entries + i, x * column_width, y + start_height,
         ((cursor % column_count) == x) && ((cursor / column_count) == y)
       );
     }

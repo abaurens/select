@@ -12,6 +12,7 @@ struct s_settings
   int high_contrast_flag;
   int column_count;
   const char *separator;
+  const char *prompt;
 };
 
 extern t_settings g_settings;
